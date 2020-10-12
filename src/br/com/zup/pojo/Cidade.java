@@ -1,8 +1,6 @@
 package br.com.zup.pojo;
 
 
-
-
 public class Cidade {
 	private String nome;
 	private String cep;
@@ -13,14 +11,7 @@ public class Cidade {
 	private String dataFundacao;
 	
 	
-	public Cidade(String nome, String cep, int qtdHabitantes, boolean capital, String estado, double rendaPerCapita, String dataFundacao) {
-		this.nome = nome;
-		this.cep = cep;
-		this.qtdHabitantes = qtdHabitantes;
-		this.capital = capital;
-		this.estado = estado;
-		this.rendaPerCapita = rendaPerCapita;
-		this.dataFundacao = dataFundacao;
+	public Cidade() {
 	}
 	
 	
@@ -67,4 +58,8 @@ public class Cidade {
 		this.dataFundacao = dataFundacao;
 	}
 
+	public String mostraDados() {
+		return "Nome: "+nome+" - Cep: "+cep+" - Nº Habitantes: "+qtdHabitantes+" - Sigla: "+estado+" - Renda PerCapita: "+rendaPerCapita+"\n";
+	}
+	
 }
