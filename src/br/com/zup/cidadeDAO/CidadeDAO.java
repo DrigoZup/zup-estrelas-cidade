@@ -18,7 +18,7 @@ public class CidadeDAO {
 		this.conexao = new ConnectionFactory().getConnection();
 	}
 
-	public void consultaBanco(ResultSet rs, List<Cidade> listaCidades) throws SQLException{
+	public void construtorDeListas(ResultSet rs, List<Cidade> listaCidades) throws SQLException{
 		while (rs.next()) {
 			Cidade cidade = new Cidade();
 
@@ -62,7 +62,7 @@ public class CidadeDAO {
 
 	public List<Cidade> listaCidade() throws SQLException {
 
-		List<Cidade> cidades = new ArrayList<>();
+		List<Cidade> listaCidades = new ArrayList<>();
 
 		String listagemSQL = "select * from cidade";
 
@@ -71,7 +71,7 @@ public class CidadeDAO {
 
 			ResultSet resultadoConsulta = comando.executeQuery();
 
-			consultaBanco(resultadoConsulta, cidades);
+			construtorDeListas(resultadoConsulta, listaCidades);
 			
 			comando.close();
 		} catch (SQLException exception) {
@@ -80,7 +80,7 @@ public class CidadeDAO {
 
 		}
 
-		return cidades;
+		return listaCidades;
 	}
 
 	public boolean removeCidade(String cep) throws SQLException {
@@ -140,10 +140,10 @@ public class CidadeDAO {
 		
 		try {
 			PreparedStatement comando = this.conexao.prepareStatement(buscaSQL);
-			comando.setString(1, "%"+textoDigitado+"%");
+			comando.setString(1, textoDigitado+"%");
 			ResultSet resultadoConsulta = comando.executeQuery();
 			
-			consultaBanco(resultadoConsulta, cidadesEncontradas);
+			construtorDeListas(resultadoConsulta, cidadesEncontradas);
 			comando.close();
 		} catch (SQLException exception) {
 			System.err.println("Nenhuma cidade encontrada...");
@@ -154,7 +154,7 @@ public class CidadeDAO {
 
 	public List<Cidade> buscaCidadeBySigla(String sigla) throws SQLException {
 		
-		List<Cidade> listaCidades = new ArrayList<Cidade>();
+		List<Cidade> cidadesEncontradas = new ArrayList<Cidade>();
 		
 		String buscaSQL = "select * from cidade, estado where cidade.estado = estado.sigla and estado.sigla = ?";
 		
@@ -164,13 +164,13 @@ public class CidadeDAO {
 		
 		ResultSet resultadoConsulta = comando.executeQuery();
 		
-		consultaBanco(resultadoConsulta, listaCidades);
+		construtorDeListas(resultadoConsulta, cidadesEncontradas);
 		comando.close();
 		} catch(SQLException exception) {
 			System.err.println("Nenhuma cidade encontrada...");
 			System.err.println(exception.getMessage());
 		}
-		return listaCidades;
+		return cidadesEncontradas;
 	}
 
 	public int contaCidadeBySigla(String sigla) throws SQLException {
@@ -200,7 +200,7 @@ public class CidadeDAO {
 	}
 	
 	public List<Cidade> selecionaCapitais(boolean capital) throws SQLException {
-		List<Cidade> capitais = new ArrayList<Cidade>();
+		List<Cidade> capitaisOuNao = new ArrayList<Cidade>();
 		
 		String selecaoSQL = "select * from cidade where cidade.capital = ?";
 		
@@ -210,15 +210,14 @@ public class CidadeDAO {
 			comando.setBoolean(1, capital);
 			
 			ResultSet resultadoConsulta = comando.executeQuery();
-			consultaBanco(resultadoConsulta, capitais);
+			construtorDeListas(resultadoConsulta, capitaisOuNao);
 			comando.close();
 			
 		} catch (SQLException exception) {
 			System.err.println("Não foi possível obter essa seleção.");
 			System.err.println(exception.getMessage());
 		}
-		return capitais;
+		return capitaisOuNao;
 	}
-	
-	
+		
 }

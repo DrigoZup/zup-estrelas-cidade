@@ -10,21 +10,28 @@ import br.com.zup.factory.ConnectionFactory;
 
 public class Principal {
 
-	public static void menu() {
+	public static final void MENU() {
 
 		System.out.println("==== Fake IBGE ====\n" 
 				+ "Escolha uma opção!\n\n" 
 				+ "1 - Cadastrar uma nova cidade\n"
 				+ "2 - Listar cidades\n" 
 				+ "3 - Deletar cidades\n"
-				+ "4 - Buscar cidade pelo Cep\n"
-				+ "5 - Buscar cidade por texto\n"
-				+ "6 - Buscar lista de cidades pela sigla do estado\n"
-				+ "7 - Contar cidades em um estado\n"
-				+ "8 - Exibir capitais ou não capitais\n" 
+				+ "4 - Entrar no sistema de buscas\n"
+				+ "5 - Contabilizar cidades em um estado\n"
+				+ "6 - Listar capitais ou não capitais\n" 
 				+ "0 - Encerrar o programa");
 	}
 
+	public static final void MENUPESQUISA() {
+		System.out.println("==== Pesquise da maneira mais cômoda para você ====\n" 
+				+ "Escolha uma opção!\n\n" 
+				+ "1 - Buscar cidade pelo Cep\n"
+				+ "2 - Buscar cidade por texto\n" 
+				+ "3 - Buscar cidades pela sigla do estado\n"
+				+ "0 - Voltar ao menu principal\n");
+	}
+	
 	public static void insereCidade(Scanner teclado) throws SQLException {
 
 		System.out.println("-----------------------------------");
@@ -39,7 +46,6 @@ public class Principal {
 		int qtdHabitantes = teclado.nextInt();
 		System.out.println("A cidade é uma capital?");
 		boolean capital = verificaCapital(teclado);
-
 		System.out.println("Qual a sigla do estado da cidade?");
 		String estado = teclado.next();
 		System.out.println("Informe a renda percapita da cidade: ");
@@ -65,7 +71,7 @@ public class Principal {
 	public static boolean verificaCapital(Scanner teclado) {
 
 		String confereCapital;
-		boolean capital = false;
+		boolean CapitalOuNao = false;
 		
 		do {
 			System.out.println("Digite S para sim e N para não");
@@ -73,12 +79,12 @@ public class Principal {
 
 			switch (confereCapital) {
 			case "S": {
-				capital = true;
+				CapitalOuNao = true;
 				break;
 			}
 
 			case "N": {
-				capital = false;
+				CapitalOuNao = false;
 				break;
 			}
 			default:
@@ -86,34 +92,35 @@ public class Principal {
 			}
 		} while ((!confereCapital.equals("S") && (!confereCapital.equals("N"))));
 
-		return capital;
+		return CapitalOuNao;
 	}
 
 	public static void listaCidades() throws SQLException {
 
-		System.out.println("----------------------------------------\n" + "            LISTA DE CIDADES            \n"
+		System.out.println("----------------------------------------\n" 
+				+ "            LISTA DE CIDADES            \n"
 				+ "----------------------------------------\n");
 
-		CidadeDAO listagem = new CidadeDAO();
-		List<Cidade> cidadesDB = listagem.listaCidade();
+		CidadeDAO cidadesDB = new CidadeDAO();
+		List<Cidade> listagem = cidadesDB.listaCidade();
 
-		for (Cidade cidade : cidadesDB) {
+		for (Cidade cidade : listagem) {
 			System.out.println(cidade.mostraDados());
 		}
 	}
 
 	public static void deletaCidade(Scanner teclado) throws SQLException {
 
-		System.out.println("Digite o Cep da cidade que quer encontrar");
+		System.out.println("Digite o Cep da cidade que quer remover");
 		String cep = teclado.next();
 
 		CidadeDAO cidadeDeleta = new CidadeDAO();
-
 		cidadeDeleta.removeCidade(cep);
+		
 		System.out.println("A cidade de cep " + cep + " foi removida do banco de dados!");
 	}
 
-	public static void buscaCidadeCep(Scanner teclado) throws SQLException {
+	public static void buscaCidadeByCep(Scanner teclado) throws SQLException {
 		
 		System.out.println("Digite o cep da cidade que deseja encontrar");
 		String cep = teclado.next();
@@ -124,7 +131,7 @@ public class Principal {
 		System.out.println("\n"+cidadeEncontrada.mostraDados());
 	}
 	
-	public static void buscaCidadeNome(Scanner teclado) throws SQLException {
+	public static void buscaCidadeByTrechoNome(Scanner teclado) throws SQLException {
 		
 		System.out.println("Digite o trecho do nome da cidade que você quer procurar");
 		String trechoNomeCidade = teclado.next();
@@ -141,10 +148,10 @@ public class Principal {
 		System.out.println("Digite a sigla do estado para que eu liste as cidades dele:");
 		String sigla = teclado.next();
 		
-		CidadeDAO listagem = new CidadeDAO();
-		List<Cidade> cidadesDB = listagem.buscaCidadeBySigla(sigla);
+		CidadeDAO cidadesDB = new CidadeDAO();
+		List<Cidade> listagem = cidadesDB.buscaCidadeBySigla(sigla);
 		
-		for (Cidade cidade : cidadesDB) {
+		for (Cidade cidade : listagem) {
 			System.out.println(cidade.mostraDados());
 		}
 	}
@@ -154,16 +161,16 @@ public class Principal {
 		String sigla = teclado.next();
 		
 		CidadeDAO contagem = new CidadeDAO();
-		
 		contagem.contaCidadeBySigla(sigla);
 	}
 	
-	public static void exibirCapitais(Scanner teclado) throws SQLException {
+	public static void exibirCapitaisOuNao(Scanner teclado) throws SQLException {
 		
 		System.out.println("Você deseja listar as capitais?");
-		boolean escolheCapital = verificaCapital(teclado);
+		boolean capitalOuNao = verificaCapital(teclado);
+		
 		CidadeDAO capitais = new CidadeDAO();
-		List<Cidade> cidades = capitais.selecionaCapitais(escolheCapital);
+		List<Cidade> cidades = capitais.selecionaCapitais(capitalOuNao);
 		
 		for (Cidade cidade : cidades) {
 			System.out.println(cidade.mostraDados());
@@ -174,13 +181,13 @@ public class Principal {
 
 		Scanner teclado = new Scanner(System.in);
 		Connection conexao = new ConnectionFactory().getConnection();
-		String escolhaIBGE = null;
+		String escolheMetodoPrincipal = null;
 
 		do {
-			menu();
-			escolhaIBGE = teclado.next();
+			MENU();
+			escolheMetodoPrincipal = teclado.next();
 
-			switch (escolhaIBGE) {
+			switch (escolheMetodoPrincipal) {
 			case "1": {
 
 				insereCidade(teclado);
@@ -201,34 +208,57 @@ public class Principal {
 			
 			case "4": {
 				
-				buscaCidadeCep(teclado);
+				String opcaoPesquisa = null;;
+				
+				do {
+					
+					MENUPESQUISA();
+					opcaoPesquisa = teclado.next();
+					switch (opcaoPesquisa) {
+					
+					case "1": {
+						
+						buscaCidadeByCep(teclado);
+						break;
+					}
+					
+					case "2": {
+						
+						buscaCidadeByTrechoNome(teclado);
+						break;
+					}
+					
+					case "3": {
+											
+						buscaCidadeBySigla(teclado);
+						break;
+					}
+					
+					case "0": {
+						
+						main(args);
+						return;
+					}
+					default:
+						System.out.println("Opção Inválida");
+					}
+				} while (!opcaoPesquisa.equals("0")); 
+				
 				break;
 			}
 			
 			case "5": {
 				
-				buscaCidadeNome(teclado);
+				contaCidadeBySigla(teclado);
 				break;
 			}
 			
 			case "6": {
 				
-				buscaCidadeBySigla(teclado);
+				exibirCapitaisOuNao(teclado);
 				break;
 			}
 
-			case "7": {
-				
-				contaCidadeBySigla(teclado);
-				break;
-			}
-			
-			case "8": {
-				
-				exibirCapitais(teclado);
-				break;
-			}
-			
 			case "0": {
 				System.out.println("Programa encerrado");
 				break;
@@ -237,7 +267,7 @@ public class Principal {
 			default:
 				System.out.println("Opção Inválida");
 			}
-		} while (!escolhaIBGE.equals("0"));
+		} while (!escolheMetodoPrincipal.equals("0"));
 
 		conexao.close();
 		teclado.close();

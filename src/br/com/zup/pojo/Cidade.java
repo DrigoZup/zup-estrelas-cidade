@@ -14,7 +14,6 @@ public class Cidade {
 	public Cidade() {
 	}
 	
-	
 	public String getNome() {
 		return nome;
 	}
@@ -59,7 +58,8 @@ public class Cidade {
 	}
 
 	public String mostraDados() {
-		return "Nome: "+nome+" - Cep: "+cep+" - Nº Habitantes: "+qtdHabitantes+" - Sigla: "+estado+" - Renda PerCapita: "+rendaPerCapita+"\n";
+		return "Nome: "+nome+" - Cep: "+cep+" - Nº Habitantes: "+qtdHabitantes+" - Sigla: "+estado+"\n"
+				+ "Renda PerCapita: "+rendaPerCapita+" - Data de Fundação: "+dataFundacao+"\n";
 	}
 	
 }
