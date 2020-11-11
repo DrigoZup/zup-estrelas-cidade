@@ -18,7 +18,7 @@ public class CidadeDAO {
 		this.conexao = new ConnectionFactory().getConnection();
 	}
 
-	public void construtorDeListas(ResultSet rs, List<Cidade> listaCidades) throws SQLException{
+	private static void construtorDeListas(ResultSet rs, List<Cidade> listaCidades) throws SQLException{
 		while (rs.next()) {
 			Cidade cidade = new Cidade();
 

@@ -10,9 +10,9 @@ import br.com.zup.factory.ConnectionFactory;
 
 public class Principal {
 
-	public static final void MENU() {
+	public static final String MENU=(
 
-		System.out.println("==== Fake IBGE ====\n" 
+				"==== Fake IBGE ====\n" 
 				+ "Escolha uma opção!\n\n" 
 				+ "1 - Cadastrar uma nova cidade\n"
 				+ "2 - Listar cidades\n" 
@@ -21,16 +21,14 @@ public class Principal {
 				+ "5 - Contabilizar cidades em um estado\n"
 				+ "6 - Listar capitais ou não capitais\n" 
 				+ "0 - Encerrar o programa");
-	}
-
-	public static final void MENUPESQUISA() {
-		System.out.println("==== Pesquise da maneira mais cômoda para você ====\n" 
+	
+	public static final String MENUPESQUISA=(
+				"==== Pesquise da maneira mais cômoda para você ====\n" 
 				+ "Escolha uma opção!\n\n" 
 				+ "1 - Buscar cidade pelo Cep\n"
 				+ "2 - Buscar cidade por texto\n" 
 				+ "3 - Buscar cidades pela sigla do estado\n"
 				+ "0 - Voltar ao menu principal\n");
-	}
 	
 	public static void insereCidade(Scanner teclado) throws SQLException {
 
@@ -184,7 +182,7 @@ public class Principal {
 		String escolheMetodoPrincipal = null;
 
 		do {
-			MENU();
+			System.out.println(MENU);
 			escolheMetodoPrincipal = teclado.next();
 
 			switch (escolheMetodoPrincipal) {
@@ -212,7 +210,7 @@ public class Principal {
 				
 				do {
 					
-					MENUPESQUISA();
+					System.out.println(MENUPESQUISA);
 					opcaoPesquisa = teclado.next();
 					switch (opcaoPesquisa) {
 					
